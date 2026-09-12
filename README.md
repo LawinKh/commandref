@@ -55,8 +55,13 @@ nothing starts with an underscore.
 
 ## Adding a command
 
-Edit `data/commands.js` and nothing else. Every page reads from it, and the
-counts on the landing page are derived from it, so nothing else drifts.
+Edit `data/commands.js`. It is the only file that holds command content —
+every page reads from it, and the counts on the landing page are derived from
+it, so nothing else drifts.
+
+One extra step before you publish: bump the asset version (see
+[Cache busting](#cache-busting) below), or returning visitors keep seeing the
+copy their browser already cached.
 
 There are three tables in the file:
 
@@ -131,6 +136,39 @@ symbol and no trailing whitespace.
 A note on case: the GitHub Pages server is case-sensitive even though Windows
 and macOS usually are not. `Git-Mac.html` works on your machine and 404s once
 published, which is why every filename here is lowercase.
+
+## Cache busting
+
+Every page loads its three assets with a version query:
+
+```html
+<link rel="stylesheet" href="assets/style.css?v=2">
+<script src="data/commands.js?v=2" defer></script>
+<script src="assets/app.js?v=2" defer></script>
+```
+
+Browsers re-fetch an HTML page far more eagerly than the files it pulls in, so
+without this a returning visitor gets your new `index.html` alongside the
+`style.css` they cached last week — new markup, old rules, broken layout. The
+query makes it a different URL, which no cache can satisfy from an old entry.
+
+**Whenever you change `commands.js`, `style.css` or `app.js`, bump the number
+in all six pages before you push.** From the repository root in Git Bash:
+
+```bash
+sed -i 's/?v=2/?v=3/g' *.html
+```
+
+Or in PowerShell:
+
+```powershell
+Get-ChildItem *.html | ForEach-Object { (Get-Content $_ -Raw) -replace '\?v=2','\?v=3' | Set-Content $_ -Encoding utf8 }
+```
+
+The number is arbitrary — it only has to differ from last time. Forgetting it
+is not fatal: GitHub Pages sets a short max-age, so most visitors catch up
+within minutes. It is the visitors whose browsers cache more aggressively,
+as Edge does, that the bump protects.
 
 ## Notes on the content
 
