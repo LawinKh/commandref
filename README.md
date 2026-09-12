@@ -48,10 +48,16 @@ nothing starts with an underscore.
 
 | Key | What it does |
 | --- | --- |
-| `/` | Focus the search box |
+| `/` | Focus the search box and select what is already in it, so typing replaces the old query |
 | `Esc` | Clear the search and restore the full list |
 | `Tab` | Move between cards, copy buttons and links |
 | `Enter` / `Space` | Expand the focused card |
+
+The `/` shortcut is handled in `assets/app.js` and is suppressed whenever the
+key lands in an `<input>`, `<textarea>`, `<select>` or a contenteditable
+element. So `/` typed inside the search box is a literal slash, and slashes
+stay searchable — useful for the Git Bash drive paths such as `/c/projects`.
+Any new field you add to a page inherits this for free; nothing needs wiring up.
 
 ## Adding a command
 
