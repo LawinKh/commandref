@@ -381,6 +381,98 @@
     document.documentElement.style.setProperty('--hdr', header.offsetHeight + 'px');
   }
 
+  /* The header wraps to two or three rows on narrow screens, and every sticky
+     offset on the page is derived from its height. A window resize listener
+     can fire before the new layout has settled and bake in a stale value, so
+     watch the element itself where the browser supports it. */
+  function watchHeader() {
+    if (!header) { return; }
+    if (window.ResizeObserver) {
+      new window.ResizeObserver(measureHeader).observe(header);
+    }
+    window.addEventListener('resize', measureHeader);
+    window.addEventListener('load', measureHeader);
+  }
+
+  /* --- theme -------------------------------------------------------------
+
+     Three states, two buttons. With nothing stored the page follows the
+     system setting; clicking a button pins that theme; clicking the pinned
+     one again releases it back to the system. The pre-paint script in each
+     page's <head> applies a pinned theme before first paint, so there is no
+     flash of the wrong colours. */
+
+  var THEME_KEY = 'cmdref-theme';
+  var THEME_BG = { light: '#fbfbfa', dark: '#121315' };
+  var themeBtns = document.querySelectorAll('[data-theme-set]');
+  var darkMQ = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+  function storedTheme() {
+    try {
+      var v = window.localStorage.getItem(THEME_KEY);
+      return (v === 'light' || v === 'dark') ? v : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function activeTheme() {
+    return storedTheme() || (darkMQ && darkMQ.matches ? 'dark' : 'light');
+  }
+
+  /* Keep the browser's own chrome in step with a pinned theme. The two
+     media-scoped <meta name="theme-color"> tags in the markup stay as the
+     no-JS fallback; this one is inserted first, so it wins while it exists. */
+  function paintThemeMeta(theme) {
+    var m = document.getElementById('theme-color-pinned');
+    if (!storedTheme()) {
+      if (m && m.parentNode) { m.parentNode.removeChild(m); }
+      return;
+    }
+    if (!m) {
+      m = document.createElement('meta');
+      m.id = 'theme-color-pinned';
+      m.setAttribute('name', 'theme-color');
+      document.head.insertBefore(m, document.head.firstChild);
+    }
+    m.setAttribute('content', THEME_BG[theme]);
+  }
+
+  function syncTheme() {
+    var pinned = storedTheme();
+    var active = activeTheme();
+
+    if (pinned) { document.documentElement.setAttribute('data-theme', pinned); }
+    else { document.documentElement.removeAttribute('data-theme'); }
+
+    for (var i = 0; i < themeBtns.length; i++) {
+      var isActive = themeBtns[i].getAttribute('data-theme-set') === active;
+      themeBtns[i].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      themeBtns[i].title = isActive && pinned
+        ? 'Click again to follow your system setting'
+        : 'Use the ' + themeBtns[i].getAttribute('data-theme-set') + ' theme';
+    }
+
+    paintThemeMeta(active);
+    measureHeader();
+  }
+
+  function bindTheme() {
+    for (var i = 0; i < themeBtns.length; i++) {
+      themeBtns[i].addEventListener('click', function () {
+        var want = this.getAttribute('data-theme-set');
+        try {
+          if (storedTheme() === want) { window.localStorage.removeItem(THEME_KEY); }
+          else { window.localStorage.setItem(THEME_KEY, want); }
+        } catch (e) { /* ignore */ }
+        syncTheme();
+        announce(storedTheme() ? activeTheme() + ' theme' : 'Following the system theme');
+      });
+    }
+    if (darkMQ && darkMQ.addEventListener) { darkMQ.addEventListener('change', syncTheme); }
+    else if (darkMQ && darkMQ.addListener) { darkMQ.addListener(syncTheme); }
+  }
+
   /* --- scroll spy for the left rail -------------------------------------- */
 
   function startSpy() {
@@ -459,9 +551,10 @@
   }
 
   run();
+  bindTheme();
+  syncTheme();
   measureHeader();
-  window.addEventListener('resize', measureHeader);
-  window.addEventListener('load', measureHeader);
+  watchHeader();
 
   var spyUpdate = MODE === 'page' ? startSpy() : null;
 

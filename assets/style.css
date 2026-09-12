@@ -20,6 +20,11 @@
   --accent-fg: #ffffff;
   --mark: #a32b1c;
 
+  /* Green, used only for the source-repository button. 5.1:1 against white. */
+  --gh: #1a7f37;
+  --gh-hover: #15662c;
+  --gh-fg: #ffffff;
+
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           "Helvetica Neue", Arial, sans-serif;
@@ -28,8 +33,12 @@
   --hdr: 6.5rem; /* real height is written here by app.js */
 }
 
+/* Dark comes from the system setting unless the header toggle has pinned
+   light. The explicit [data-theme="dark"] block below repeats the same
+   tokens at equal specificity, so source order lets the toggle win in
+   both directions. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #121315;
     --surface: #1a1c1f;
     --surface-2: #232629;
@@ -40,7 +49,28 @@
     --accent: #85b6ff;
     --accent-fg: #0d1117;
     --mark: #ff9c8d;
+    /* Lighter green with dark text: 7.5:1. The light-mode green would
+       only reach 2.3:1 here, so the roles swap rather than the hue. */
+    --gh: #3fb950;
+    --gh-hover: #56d364;
+    --gh-fg: #0d1117;
   }
+}
+
+:root[data-theme="dark"] {
+  --bg: #121315;
+  --surface: #1a1c1f;
+  --surface-2: #232629;
+  --border: #34373d;
+  --border-strong: #4a4e56;
+  --text: #eceef1;
+  --muted: #a7acb5;
+  --accent: #85b6ff;
+  --accent-fg: #0d1117;
+  --mark: #ff9c8d;
+  --gh: #3fb950;
+  --gh-hover: #56d364;
+  --gh-fg: #0d1117;
 }
 
 /* --- Reset --------------------------------------------------------- */
@@ -135,7 +165,9 @@ a:hover { text-decoration: none; }
 }
 
 .seg a,
-.seg span {
+.seg span,
+.seg button {
+  font-family: inherit;
   font-size: .8125rem;
   line-height: 1;
   padding: .5rem .6rem;
@@ -146,14 +178,45 @@ a:hover { text-decoration: none; }
   color: var(--muted);
   white-space: nowrap;
 }
-.seg a + a,
-.seg span + a,
-.seg a + span { border-left: 1px solid var(--border); }
-.seg a:hover { color: var(--accent); background: var(--surface-2); }
-.seg [aria-current="page"] {
+.seg button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.seg > * + * { border-left: 1px solid var(--border); }
+.seg a:hover,
+.seg button:hover { color: var(--accent); background: var(--surface-2); }
+.seg [aria-current="page"],
+.seg [aria-pressed="true"] {
   background: var(--accent);
   color: var(--accent-fg);
   font-weight: 600;
+}
+
+/* Source button at the end of the header row. Green so it reads as the one
+   link that leaves the site; sized to line up with the segmented switches. */
+.src-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: .5rem .7rem;
+  font-family: var(--mono);
+  font-size: .75rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--gh-fg);
+  background: var(--gh);
+  border: 1px solid var(--gh);
+  border-radius: var(--radius);
+  text-decoration: none;
+}
+.src-link:hover {
+  background: var(--gh-hover);
+  border-color: var(--gh-hover);
 }
 
 .search-wrap {
@@ -574,6 +637,15 @@ a:hover { text-decoration: none; }
 }
 .foot a { margin-right: 1rem; }
 .foot p { margin-top: .5rem; }
+
+.foot-name {
+  margin-top: .9rem;
+  padding-top: .9rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: .75rem;
+  color: var(--muted);
+}
 
 kbd {
   font-family: var(--mono);

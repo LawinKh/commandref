@@ -7,6 +7,12 @@ split into four sets: Git and Bash, each for macOS and Windows.
 purpose, and a copy button. Clicking a card reveals an example and its
 common flags. Search filters all of it as you type.
 
+The header carries a Light / Dark toggle. With nothing chosen the page
+follows your system setting; clicking a button pins that theme and
+remembers it; clicking the pinned one again releases it back to the system.
+A small script in each page's `<head>` applies a pinned theme before first
+paint, so there is no flash of the wrong colours on load.
+
 No frameworks, no build step, no CDN links, no external fonts, no
 dependencies of any kind. It is six HTML files, one stylesheet, one script
 and one data file.
