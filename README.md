@@ -17,6 +17,20 @@ No frameworks, no build step, no CDN links, no external fonts, no
 dependencies of any kind. It is six HTML files, one stylesheet, one script
 and one data file.
 
+## About
+
+**Built with AI, and not independently verified.** The commands themselves come
+from existing cheat sheets, but every one-line purpose, example, flag note and
+PowerShell equivalent was generated rather than tested. Treat the set as a
+starting point rather than an authority, and check anything unfamiliar against
+`git help <command>` or `<command> --help` before you run it.
+
+Take particular care with the cards marked `destructive`. Those delete files,
+discard uncommitted work, or rewrite published history, and several of them
+cannot be undone.
+
+I hope it serves you well.
+
 ## Running it
 
 Double-click `index.html`. That is the whole process — it works from
