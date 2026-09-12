@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A fast, minimal reference for every Git and Bash command in the cheat sheet, split by tool and operating system, with a copy button on each one.">
+<meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121315" media="(prefers-color-scheme: dark)">
+<title>Git &amp; Bash command reference</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230b52b8'/%3E%3Cpath d='M3.8 4.8 6.6 8l-2.8 3.2' fill='none' stroke='%23fff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8.6 11.4h3.6' stroke='%23fff' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body data-mode="all">
+
+<a class="skip" href="#main">Skip to content</a>
+<div class="sr" id="live" role="status" aria-live="polite"></div>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <a class="brand" href="index.html">&gt;_ commandref</a>
+    <div class="search-wrap">
+      <label class="sr" for="search">Search all four sets</label>
+      <input id="search" type="search" placeholder="Search all four sets  ( / )" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <span class="count" id="count"></span>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="intro">
+    <h1>Git &amp; Bash command reference</h1>
+    <p>Every command from the cheat sheet, in its native form for the shell you are actually in. Search from the box above to reach any of them, or pick a set.</p>
+  </div>
+
+  <div class="layout plain">
+    <div class="content">
+
+      <div class="tiles">
+        <a class="tile" data-tool="git" data-os="mac" href="git-mac.html">
+          <h2>Git &middot; macOS</h2>
+          <p>Version control from zsh. The everyday loop, branches, history, and undoing things.</p>
+          <span class="tile-meta"></span>
+        </a>
+        <a class="tile" data-tool="git" data-os="windows" href="git-windows.html">
+          <h2>Git &middot; Windows</h2>
+          <p>The same commands, with the PowerShell quoting and pager traps called out.</p>
+          <span class="tile-meta"></span>
+        </a>
+        <a class="tile" data-tool="bash" data-os="mac" href="bash-mac.html">
+          <h2>Bash &middot; macOS</h2>
+          <p>Moving around, files, searching, pipes and redirects, housekeeping.</p>
+          <span class="tile-meta"></span>
+        </a>
+        <a class="tile" data-tool="bash" data-os="windows" href="bash-windows.html">
+          <h2>Bash &middot; Windows</h2>
+          <p>Git Bash forms, plus native PowerShell for the six commands that silently differ.</p>
+          <span class="tile-meta"></span>
+        </a>
+      </div>
+
+      <div class="results" id="results" hidden></div>
+      <p class="empty" id="empty" hidden>No match</p>
+
+    </div>
+  </div>
+
+</main>
+
+<footer class="foot">
+  <a href="git-mac.html">Git &middot; macOS</a>
+  <a href="git-windows.html">Git &middot; Windows</a>
+  <a href="bash-mac.html">Bash &middot; macOS</a>
+  <a href="bash-windows.html">Bash &middot; Windows</a>
+  <p>Press <kbd>/</kbd> to search, <kbd>Esc</kbd> to clear.</p>
+</footer>
+
+<script src="data/commands.js" defer></script>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
