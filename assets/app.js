@@ -332,7 +332,12 @@
 
     for (var j = 0; j < hits.length; j++) {
       var c = hits[j];
-      var a = el('a', 'result');
+
+      /* The row is a container, not a link. A <button> may not be nested
+         inside an <a>, so the link and the copy button are siblings. */
+      var row = el('div', 'result');
+
+      var a = el('a', 'result-link');
       a.href = pageFor(c) + '#' + c.id;
       a.appendChild(el('code', 'cmd-text', c.command));
       if (c.destructive) {
@@ -343,7 +348,15 @@
       a.appendChild(el('span', 'tag',
         TOOL_LABEL[c.tool] + ' · ' + OS_LABEL[c.os]));
       a.appendChild(el('span', 'cmd-purpose', c.purpose));
-      resultsEl.appendChild(a);
+
+      var copy = el('button', 'copy', 'Copy');
+      copy.type = 'button';
+      copy.setAttribute('data-copy', c.command);
+      copy.setAttribute('aria-label', 'Copy ' + c.command);
+
+      row.appendChild(a);
+      row.appendChild(copy);
+      resultsEl.appendChild(row);
     }
 
     resultsEl.hidden = hits.length === 0;
@@ -578,6 +591,18 @@
       if (up(e.target, 'cmd-detail')) { return; }
       var art = up(e.target, 'cmd');
       if (art) { toggle(art); }
+    });
+  }
+
+  /* Search results on index.html and 404.html carry their own copy buttons.
+     Anything that is not the button is the link, and navigates as normal. */
+  if (resultsEl) {
+    resultsEl.addEventListener('click', function (e) {
+      var btn = up(e.target, 'copy');
+      if (!btn) { return; }
+      e.stopPropagation();
+      e.preventDefault();
+      copyText(btn.getAttribute('data-copy'), btn);
     });
   }
 

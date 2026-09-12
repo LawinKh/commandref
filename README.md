@@ -166,9 +166,9 @@ published, which is why every filename here is lowercase.
 Every page loads its three assets with a version query:
 
 ```html
-<link rel="stylesheet" href="assets/style.css?v=2">
-<script src="data/commands.js?v=2" defer></script>
-<script src="assets/app.js?v=2" defer></script>
+<link rel="stylesheet" href="assets/style.css?v=3">
+<script src="data/commands.js?v=3" defer></script>
+<script src="assets/app.js?v=3" defer></script>
 ```
 
 Browsers re-fetch an HTML page far more eagerly than the files it pulls in, so
@@ -180,13 +180,13 @@ query makes it a different URL, which no cache can satisfy from an old entry.
 in all six pages before you push.** From the repository root in Git Bash:
 
 ```bash
-sed -i 's/?v=2/?v=3/g' *.html
+sed -i 's/?v=3/?v=4/g' *.html
 ```
 
 Or in PowerShell:
 
 ```powershell
-Get-ChildItem *.html | ForEach-Object { (Get-Content $_ -Raw) -replace '\?v=2','\?v=3' | Set-Content $_ -Encoding utf8 }
+Get-ChildItem *.html | ForEach-Object { (Get-Content $_ -Raw) -replace '\?v=3','\?v=4' | Set-Content $_ -Encoding utf8 }
 ```
 
 The number is arbitrary — it only has to differ from last time. Forgetting it

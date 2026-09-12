@@ -602,20 +602,32 @@ a:hover { text-decoration: none; }
 .results { margin-top: 1.5rem; }
 .results[hidden] { display: none; }
 
+/* The row is a container holding a link and a copy button side by side;
+   the button cannot live inside the link, so it sits next to it. */
 .result {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: .5rem;
+}
+.result:hover { border-color: var(--accent); }
+
+.result-link {
+  flex: 1 1 auto;
+  min-width: 0;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: .3rem .6rem;
   padding: .7rem .9rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  margin-bottom: .5rem;
   text-decoration: none;
   color: var(--text);
+  border-radius: var(--radius);
 }
-.result:hover { border-color: var(--accent); }
+.result .copy { margin: .5rem .5rem 0 0; }
 .result .cmd-text { font-size: .875rem; }
 .result .tag {
   font-family: var(--mono);
