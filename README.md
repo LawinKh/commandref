@@ -67,11 +67,15 @@ nothing starts with an underscore.
 | `Tab` | Move between cards, copy buttons and links |
 | `Enter` / `Space` | Expand the focused card |
 
-The `/` shortcut is handled in `assets/app.js` and is suppressed whenever the
-key lands in an `<input>`, `<textarea>`, `<select>` or a contenteditable
-element. So `/` typed inside the search box is a literal slash, and slashes
-stay searchable — useful for the Git Bash drive paths such as `/c/projects`.
-Any new field you add to a page inherits this for free; nothing needs wiring up.
+Press `/` anywhere on the page and the search box takes focus, so you can start
+typing straight away without reaching for the mouse. The one exception is when
+you are already typing in a box — there it just types a slash.
+
+Under the hood that rule lives in `assets/app.js`, which ignores the shortcut
+whenever the key lands in an `<input>`, `<textarea>`, `<select>` or a
+contenteditable element. That is why slashes stay searchable, which matters for
+Git Bash drive paths such as `/c/projects`, and why any new field you add to a
+page gets the same behaviour with nothing to wire up.
 
 ## Adding a command
 
